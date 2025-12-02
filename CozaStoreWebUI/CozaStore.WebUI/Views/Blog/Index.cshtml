@@ -1,0 +1,125 @@
+@model List<CozaStore.Application.DTOs.BlogPostDto>
+@{
+    ViewData["Title"] = "Blog";
+    ViewData["ActiveMenu"] = "Blog";
+    ViewData["HeaderClass"] = "header-v4";
+    ViewData["MenuShadow"] = "yes";
+}
+
+<!-- Title page -->
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('/images/bg-02.jpg');">
+    <h2 class="ltext-105 cl0 txt-center">
+        Blog
+    </h2>
+</section>	
+
+<!-- Content page -->
+<section class="bg0 p-t-62 p-b-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-9 p-b-80">
+                <div class="p-r-45 p-r-0-lg">
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var post in Model)
+                        {
+                            <!-- item blog -->
+                            <div class="p-b-63">
+                                <a asp-controller="Blog" asp-action="Detail" asp-route-id="@post.Id" class="hov-img0 how-pos5-parent">
+                                    @if (!string.IsNullOrEmpty(post.ImageUrl))
+                                    {
+                                        <img src="@post.ImageUrl" alt="@post.Title">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/blog-04.jpg" alt="@post.Title">
+                                    }
+
+                                    <div class="flex-col-c-m size-123 bg9" style="position: absolute; top: 0; right: 0;">
+                                        <span class="ltext-107 cl2 txt-center">
+                                            @post.CreatedDate.Day
+                                        </span>
+
+                                        <span class="stext-109 cl3 txt-center">
+                                            @post.CreatedDate.ToString("MMM yyyy", new System.Globalization.CultureInfo("en-US"))
+                                        </span>
+                                    </div>
+                                </a>
+
+                                <div class="p-t-32">
+                                    <h4 class="p-b-15">
+                                        <a asp-controller="Blog" asp-action="Detail" asp-route-id="@post.Id" class="ltext-108 cl2 hov-cl1 trans-04">
+                                            @post.Title
+                                        </a>
+                                    </h4>
+
+                                    <p class="stext-117 cl6">
+                                        @{
+                                            var preview = post.Content.Length > 150 
+                                                ? post.Content.Substring(0, 150) + "..." 
+                                                : post.Content;
+                                        }
+                                        @preview
+                                    </p>
+
+                                    <div class="flex-w flex-sb-m p-t-18">
+                                        <span class="flex-w flex-m stext-111 cl2 p-r-30 m-tb-10">
+                                            <span>
+                                                <span class="cl4">By</span> @(post.AuthorName ?? "Admin")
+                                            </span>
+                                        </span>
+
+                                        <a asp-controller="Blog" asp-action="Detail" asp-route-id="@post.Id" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
+                                            Devamını Oku
+
+                                            <i class="fa fa-long-arrow-right m-l-9"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="p-b-63">
+                            <p class="stext-117 cl6">Henüz blog gönderisi bulunmamaktadır.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <div class="p-t-55">
+                    <h4 class="mtext-112 cl2 p-b-33">
+                        Kategoriler
+                    </h4>
+
+                    <ul>
+                        <li class="bor18">
+                            <p class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+                                Moda
+                            </p>
+                        </li>
+
+                        <li class="bor18">
+                            <p class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+                                Güzellik
+                            </p>
+                        </li>
+
+                        <li class="bor18">
+                            <p class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+                                Sokak Stili
+                            </p>
+                        </li>
+
+                        <li class="bor18">
+                            <p class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+                                Yaşam Tarzı
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,113 @@
+@model CozaStore.Application.DTOs.BlogPostDto
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["ActiveMenu"] = "Blog";
+    ViewData["HeaderClass"] = "header-v4";
+    ViewData["MenuShadow"] = "yes";
+}
+
+<!-- breadcrumb -->
+<div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+        <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">
+            Ana Sayfa
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+
+        <a asp-controller="Blog" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">
+            Blog
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+
+        <span class="stext-109 cl4">
+            @Model.Title
+        </span>
+    </div>
+</div>
+
+<!-- Content page -->
+<section class="bg0 p-t-52 p-b-20">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-9 p-b-80">
+                <div class="p-r-45 p-r-0-lg">
+                    <!--  -->
+                    <div class="wrap-pic-w how-pos5-parent">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="@Model.ImageUrl" alt="@Model.Title">
+                        }
+                        else
+                        {
+                            <img src="~/images/blog-04.jpg" alt="@Model.Title">
+                        }
+
+                        <div class="flex-col-c-m size-123 bg9" style="position: absolute; top: 0; right: 0;">
+                            <span class="ltext-107 cl2 txt-center">
+                                @Model.CreatedDate.Day
+                            </span>
+
+                            <span class="stext-109 cl3 txt-center">
+                                @Model.CreatedDate.ToString("MMM yyyy", new System.Globalization.CultureInfo("en-US"))
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-t-32">
+                        <span class="flex-w flex-m stext-111 cl2 p-b-19">
+                            <span>
+                                <span class="cl4">Yazar:</span> @(Model.AuthorName ?? "Admin")
+                            </span>
+
+                            <span class="cl12 m-l-4 m-r-6">|</span>
+
+                            <span>
+                                @Model.CreatedDate.ToString("dd MMM yyyy", new System.Globalization.CultureInfo("tr-TR"))
+                            </span>
+                        </span>
+
+                        <h4 class="ltext-109 cl2 p-b-28">
+                            @Model.Title
+                        </h4>
+
+                        <div class="stext-117 cl6 p-b-26">
+                            @Html.Raw(Model.Content.Replace("\n", "<br />"))
+                        </div>
+                    </div>            
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <div class="p-t-55">
+                    <h4 class="mtext-112 cl2 p-b-33">
+                        Kategoriler
+                    </h4>
+
+                    <ul>
+                        <li class="bor18">
+                            <p class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+                                Moda
+                            </p>
+                        </li>
+                        <li class="bor18">
+                            <p class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+                                Güzellik
+                            </p>
+                        </li>
+
+                        <li class="bor18">
+                            <p class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+                                Sokak Stili
+                            </p>
+                        </li>
+
+                        <li class="bor18">
+                            <p class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+                                Yaşam Tarzı
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

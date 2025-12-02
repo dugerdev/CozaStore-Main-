@@ -1,0 +1,9 @@
+/* Shop sayfası için özel stiller */
+
+/* Tag active state */
+.hov-tag1-active {
+    background-color: #717fe0 !important;
+    color: #fff !important;
+}
+
+

@@ -1,0 +1,100 @@
+@model List<CozaStore.Application.DTOs.BlogPostDto>
+@{
+    ViewData["Title"] = "Blog Gönderileri";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title">Blog Gönderileri</h3>
+                <a asp-action="Create" class="btn btn-primary btn-sm">
+                    <i class="bi bi-plus-circle me-1"></i> Yeni Gönderi
+                </a>
+            </div>
+            <div class="card-body">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Görsel</th>
+                            <th>Başlık</th>
+                            <th>Yazar</th>
+                            <th>Yayın Durumu</th>
+                            <th>Oluşturulma</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var post in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(post.ImageUrl))
+                                        {
+                                            <img src="@post.ImageUrl" alt="@post.Title" class="img-thumbnail" style="max-width: 80px; max-height: 80px;" />
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Görsel Yok</span>
+                                        }
+                                    </td>
+                                    <td>@post.Title</td>
+                                    <td>@(post.AuthorName ?? "Admin")</td>
+                                    <td>
+                                        @if (post.IsPublished)
+                                        {
+                                            <span class="badge bg-success">Yayında</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning">Taslak</span>
+                                        }
+                                    </td>
+                                    <td>@post.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@post.Id" class="btn btn-info btn-sm">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@post.Id" class="btn btn-warning btn-sm">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@post.Id" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">Henüz blog gönderisi bulunmamaktadır.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

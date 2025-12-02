@@ -1,0 +1,6 @@
+@CozaStoreWebAPI_HostAddress = http://localhost:5128
+
+GET {{CozaStoreWebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

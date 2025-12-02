@@ -1,0 +1,118 @@
+@model List<CozaStore.Application.DTOs.ContactDto>
+@{
+    ViewData["Title"] = "İletişim Mesajları";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title">İletişim Mesajları</h3>
+                <a asp-action="Unread" class="btn btn-warning btn-sm">
+                    <i class="bi bi-envelope-exclamation me-1"></i> Okunmamış Mesajlar
+                </a>
+            </div>
+            <div class="card-body">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>E-posta</th>
+                            <th>Mesaj</th>
+                            <th>Okundu</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var contact in Model)
+                            {
+                                <tr class="@(!contact.IsRead ? "table-warning" : "")">
+                                    <td>@contact.Email</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(contact.Message))
+                                        {
+                                            @if (contact.Message.Length > 50)
+                                            {
+                                                @contact.Message.Substring(0, 50)
+                                                <text>...</text>
+                                            }
+                                            else
+                                            {
+                                                @contact.Message
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <text>-</text>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (contact.IsRead)
+                                        {
+                                            <span class="badge text-bg-success">Okundu</span>
+                                            @if (contact.ReadDate.HasValue)
+                                            {
+                                                <br />
+                                                <small class="text-muted">@contact.ReadDate.Value.ToString("dd.MM.yyyy HH:mm")</small>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="badge text-bg-warning">Okunmadı</span>
+                                        }
+                                    </td>
+                                    <td>@contact.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Details" asp-route-id="@contact.Id" class="btn btn-info btn-sm">
+                                                <i class="bi bi-eye"></i> Detay
+                                            </a>
+                                            @if (!contact.IsRead)
+                                            {
+                                                <form asp-action="MarkAsRead" asp-route-id="@contact.Id" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-success btn-sm">
+                                                        <i class="bi bi-check-circle"></i> Okundu
+                                                    </button>
+                                                </form>
+                                            }
+                                            <form asp-action="Delete" asp-route-id="@contact.Id" method="post" class="d-inline" onsubmit="return confirm('Bu mesajı silmek istediğinizden emin misiniz?');">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center">Henüz mesaj bulunmamaktadır.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+@model List<CozaStore.Application.DTOs.ReviewDto>
+@{
+    ViewData["Title"] = "Yorumlar";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Yorum Listesi</h3>
+            </div>
+            <div class="card-body">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ürün ID</th>
+                            <th>Kullanıcı ID</th>
+                            <th>Başlık</th>
+                            <th>Yorum</th>
+                            <th>Puan</th>
+                            <th>Onay Durumu</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var review in Model)
+                            {
+                                <tr>
+                                    <td>@review.ProductId</td>
+                                    <td>@review.UserId</td>
+                                    <td>@(review.Title ?? "-")</td>
+                                    <td>@(review.Comment ?? "-")</td>
+                                    <td>
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= review.Rating)
+                                            {
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-star text-secondary"></i>
+                                            }
+                                        }
+                                        <span class="ms-1">(@review.Rating/5)</span>
+                                    </td>
+                                    <td>
+                                        @if (review.IsApproved)
+                                        {
+                                            <span class="badge text-bg-success">Onaylandı</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge text-bg-warning">Beklemede</span>
+                                        }
+                                    </td>
+                                    <td>@review.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>
+                                        @if (!review.IsApproved)
+                                        {
+                                            <form asp-action="Approve" asp-route-id="@review.Id" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    <i class="bi bi-check-circle"></i> Onayla
+                                                </button>
+                                            </form>
+                                        }
+                                        <form asp-action="Reject" asp-route-id="@review.Id" method="post" class="d-inline" onsubmit="return confirm('Bu yorumu reddetmek istediğinizden emin misiniz?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="bi bi-x-circle"></i> Reddet
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center">Henüz yorum bulunmamaktadır.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

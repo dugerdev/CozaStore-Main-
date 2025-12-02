@@ -1,0 +1,140 @@
+@using CozaStore.Application.DTOs
+@{
+    ViewData["Title"] = "Wishlist";
+    ViewData["ActiveMenu"] = "Wishlist";
+    ViewData["HeaderClass"] = "header-v4";
+    ViewData["MenuShadow"] = "yes";
+    var wishlistItems = ViewData["WishlistItems"] as List<ProductDto> ?? new List<ProductDto>();
+}
+
+<!-- breadcrumb -->
+<div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+        <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">
+            Home
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+
+        <span class="stext-109 cl4">
+            My Wishlist
+        </span>
+    </div>
+</div>
+
+<!-- TempData Messages -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="container m-t-20">
+        <div class="alert alert-success" role="alert">
+            @TempData["SuccessMessage"]
+        </div>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="container m-t-20">
+        <div class="alert alert-danger" role="alert">
+            @TempData["ErrorMessage"]
+        </div>
+    </div>
+}
+
+<!-- Wishlist -->
+<section class="bg0 p-t-75 p-b-85">
+    <div class="container">
+        @if (wishlistItems.Count == 0)
+        {
+            <div class="text-center p-t-100 p-b-100">
+                <h3 class="mtext-103 cl2 p-b-30">
+                    Your wishlist is empty
+                </h3>
+                <p class="stext-113 cl6 p-b-26">
+                    Start adding products to your wishlist to save them for later.
+                </p>
+                <a asp-controller="Shop" asp-action="Index" class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04">
+                    Continue Shopping
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+                    <div class="m-l-25 m-r--38 m-lr-0-xl">
+                        <div class="wrap-table-shopping-cart">
+                            <table class="table-shopping-cart">
+                                <tr class="table_head">
+                                    <th class="column-1">Product</th>
+                                    <th class="column-2"></th>
+                                    <th class="column-3">Price</th>
+                                    <th class="column-4">Action</th>
+                                </tr>
+
+                                @foreach (var product in wishlistItems)
+                                {
+                                    <tr class="table_row">
+                                        <td class="column-1">
+                                            <div class="how-itemcart1">
+                                                <a asp-controller="ProductDetail" asp-action="Index" asp-route-id="@product.Id">
+                                                    <img src="@(product.ImageUrl ?? "/images/product-01.jpg")" alt="@product.Name">
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="column-2">
+                                            <a asp-controller="ProductDetail" asp-action="Index" asp-route-id="@product.Id" class="stext-110 cl2 hov-cl1 trans-04">
+                                                @product.Name
+                                            </a>
+                                        </td>
+                                        <td class="column-3">@PriceHelper.FormatAsDollar(product.Price)</td>
+                                        <td class="column-4 wishlist-action-column">
+                                            <div class="wishlist-action-buttons">
+                                                <form asp-controller="Cart" asp-action="Add" method="post" class="wishlist-add-to-cart-form">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="productId" value="@product.Id" />
+                                                    <input type="hidden" name="quantity" value="1" />
+                                                    <button type="submit" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04">
+                                                        ADD TO CART
+                                                    </button>
+                                                </form>
+                                                <form asp-controller="Wishlist" asp-action="Remove" method="post" class="wishlist-remove-form">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="productId" value="@product.Id" />
+                                                    <button type="submit" class="flex-c-m stext-101 cl0 size-107 bg1 bor2 hov-btn1 p-lr-15 trans-04">
+                                                        REMOVE
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/wishlist.css">
+}
+
+@section Scripts {
+    <script>
+        // Wishlist sayfasında "Add to Cart" butonuna tıklandığında sayfayı yenile
+        // CartController.Add içinde zaten wishlist'ten kaldırma işlemi var
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToCartForms = document.querySelectorAll('.wishlist-add-to-cart-form');
+            
+            addToCartForms.forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    // Form normal submit edilecek, CartController.Add içinde wishlist'ten kaldırılacak
+                    // Sayfa yenilenecek ve ürün wishlist'ten kaldırılmış olacak
+                });
+            });
+        });
+    </script>
+}
+

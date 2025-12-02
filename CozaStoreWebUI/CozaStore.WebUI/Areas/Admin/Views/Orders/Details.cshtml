@@ -1,0 +1,145 @@
+@model CozaStore.Application.DTOs.OrderDto
+@using CozaStore.Application.Enums
+@{
+    ViewData["Title"] = "Sipariş Detayı";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Sipariş Detayı</h3>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Sipariş No:</dt>
+                    <dd class="col-sm-9">@Model.OrderNumber</dd>
+
+                    <dt class="col-sm-3">Sipariş Tarihi:</dt>
+                    <dd class="col-sm-9">@Model.OrderDate.ToString("dd.MM.yyyy HH:mm")</dd>
+
+                    <dt class="col-sm-3">Toplam Tutar:</dt>
+                    <dd class="col-sm-9">@Model.TotalAmount.ToString("C")</dd>
+
+                    <dt class="col-sm-3">Durum:</dt>
+                    <dd class="col-sm-9">
+                        @switch (Model.Status)
+                        {
+                            case OrderStatus.Pending:
+                                <span class="badge text-bg-warning">Beklemede</span>
+                                break;
+                            case OrderStatus.Processing:
+                                <span class="badge text-bg-info">İşleniyor</span>
+                                break;
+                            case OrderStatus.Shipped:
+                                <span class="badge text-bg-primary">Kargoda</span>
+                                break;
+                            case OrderStatus.Delivered:
+                                <span class="badge text-bg-success">Teslim Edildi</span>
+                                break;
+                            case OrderStatus.Cancelled:
+                                <span class="badge text-bg-danger">İptal Edildi</span>
+                                break;
+                            default:
+                                <span class="badge text-bg-secondary">@Model.Status</span>
+                                break;
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Ödeme Durumu:</dt>
+                    <dd class="col-sm-9">
+                        @switch (Model.PaymentStatus)
+                        {
+                            case PaymentStatus.Unpaid:
+                                <span class="badge text-bg-warning">Ödenmedi</span>
+                                break;
+                            case PaymentStatus.Paid:
+                                <span class="badge text-bg-success">Ödendi</span>
+                                break;
+                            case PaymentStatus.Refunded:
+                                <span class="badge text-bg-secondary">İade Edildi</span>
+                                break;
+                            case PaymentStatus.PartiallyRefunded:
+                                <span class="badge text-bg-info">Kısmen İade</span>
+                                break;
+                            default:
+                                <span class="badge text-bg-secondary">@Model.PaymentStatus</span>
+                                break;
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Kullanıcı ID:</dt>
+                    <dd class="col-sm-9">@Model.UserId</dd>
+                </dl>
+
+                <hr />
+
+                <h5 class="mb-3">Sipariş Durumunu Güncelle</h5>
+                <form asp-action="UpdateStatus" method="post" class="mb-3">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select name="status" class="form-select">
+                                @if (Model.Status == OrderStatus.Pending)
+                                {
+                                    <option value="@((int)OrderStatus.Pending)" selected>Beklemede</option>
+                                }
+                                else
+                                {
+                                    <option value="@((int)OrderStatus.Pending)">Beklemede</option>
+                                }
+                                
+                                @if (Model.Status == OrderStatus.Processing)
+                                {
+                                    <option value="@((int)OrderStatus.Processing)" selected>İşleniyor</option>
+                                }
+                                else
+                                {
+                                    <option value="@((int)OrderStatus.Processing)">İşleniyor</option>
+                                }
+                                
+                                @if (Model.Status == OrderStatus.Shipped)
+                                {
+                                    <option value="@((int)OrderStatus.Shipped)" selected>Kargoda</option>
+                                }
+                                else
+                                {
+                                    <option value="@((int)OrderStatus.Shipped)">Kargoda</option>
+                                }
+                                
+                                @if (Model.Status == OrderStatus.Delivered)
+                                {
+                                    <option value="@((int)OrderStatus.Delivered)" selected>Teslim Edildi</option>
+                                }
+                                else
+                                {
+                                    <option value="@((int)OrderStatus.Delivered)">Teslim Edildi</option>
+                                }
+                                
+                                @if (Model.Status == OrderStatus.Cancelled)
+                                {
+                                    <option value="@((int)OrderStatus.Cancelled)" selected>İptal Edildi</option>
+                                }
+                                else
+                                {
+                                    <option value="@((int)OrderStatus.Cancelled)">İptal Edildi</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-1"></i> Durumu Güncelle
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

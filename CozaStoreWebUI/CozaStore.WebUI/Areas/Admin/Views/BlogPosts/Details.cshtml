@@ -1,0 +1,91 @@
+@model CozaStore.Application.DTOs.BlogPostDto
+@{
+    ViewData["Title"] = "Blog Gönderisi Detayı";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title">Blog Gönderisi Detayı</h3>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil me-1"></i> Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i> Geri Dön
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Başlık:</dt>
+                    <dd class="col-sm-9">@Model.Title</dd>
+
+                    <dt class="col-sm-3">İçerik:</dt>
+                    <dd class="col-sm-9">
+                        <div class="border p-3 bg-light">
+                            @Html.Raw(Model.Content.Replace("\n", "<br />"))
+                        </div>
+                    </dd>
+
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <dt class="col-sm-3">Görsel:</dt>
+                        <dd class="col-sm-9">
+                            <img src="@Model.ImageUrl" alt="@Model.Title" class="img-fluid" style="max-width: 500px;" />
+                        </dd>
+                    }
+
+                    <dt class="col-sm-3">Yayın Durumu:</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.IsPublished)
+                        {
+                            <span class="badge bg-success">Yayında</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning">Taslak</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Yazar:</dt>
+                    <dd class="col-sm-9">@(Model.AuthorName ?? "Admin")</dd>
+
+                    <dt class="col-sm-3">Oluşturulma Tarihi:</dt>
+                    <dd class="col-sm-9">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+
+                    @if (Model.UpdatedDate.HasValue)
+                    {
+                        <dt class="col-sm-3">Güncellenme Tarihi:</dt>
+                        <dd class="col-sm-9">@Model.UpdatedDate.Value.ToString("dd.MM.yyyy HH:mm")</dd>
+                    }
+
+                    <dt class="col-sm-3">Durum:</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success">Aktif</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Pasif</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                    <i class="bi bi-pencil me-1"></i> Düzenle
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                    <i class="bi bi-trash me-1"></i> Sil
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

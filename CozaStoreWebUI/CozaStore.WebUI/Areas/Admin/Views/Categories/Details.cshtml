@@ -1,0 +1,59 @@
+@model CozaStore.Application.DTOs.CategoryDto
+@{
+    ViewData["Title"] = "Kategori Detayı";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Kategori Detayı</h3>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Kategori Adı:</dt>
+                    <dd class="col-sm-9">@Model.Name</dd>
+
+                    <dt class="col-sm-3">Açıklama:</dt>
+                    <dd class="col-sm-9">@(Model.Description ?? "-")</dd>
+
+                    <dt class="col-sm-3">Görsel:</dt>
+                    <dd class="col-sm-9">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-thumbnail" style="max-width: 200px; max-height: 200px;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Görsel Yok</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Durum:</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge text-bg-success">Aktif</span>
+                        }
+                        else
+                        {
+                            <span class="badge text-bg-secondary">Pasif</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Oluşturulma Tarihi:</dt>
+                    <dd class="col-sm-9">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                    <i class="bi bi-pencil me-1"></i> Düzenle
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,368 @@
+@using CozaStore.Application.DTOs
+@using CozaStore.Application.Enums
+@{
+    ViewData["Title"] = "Checkout";
+    ViewData["ActiveMenu"] = "Cart";
+    ViewData["HeaderClass"] = "header-v4";
+    ViewData["MenuShadow"] = "yes";
+
+    var cartItems = ViewData["CartItems"] as List<CartItemDto> ?? new List<CartItemDto>();
+    var total = ViewData["Total"] as decimal? ?? 0m;
+    var addresses = ViewData["Addresses"] as List<AddressDto> ?? new List<AddressDto>();
+}
+
+<!-- breadcrumb -->
+<div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+        <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">
+            Home
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+
+        <a asp-controller="Cart" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">
+            Cart
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+
+        <span class="stext-109 cl4">
+            Checkout
+        </span>
+    </div>
+</div>
+
+<!-- TempData Messages -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="container m-t-20">
+        <div class="alert alert-success" role="alert" style="background-color: #d4edda; color: #155724; padding: 12px 20px; border-radius: 4px; border: 1px solid #c3e6cb;">
+            @TempData["SuccessMessage"]
+        </div>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="container m-t-20">
+        <div class="alert alert-danger" role="alert" style="background-color: #f8d7da; color: #721c24; padding: 12px 20px; border-radius: 4px; border: 1px solid #f5c6cb;">
+            @TempData["ErrorMessage"]
+        </div>
+    </div>
+}
+
+<!-- Checkout Content -->
+<section class="bg0 p-t-104 p-b-116">
+    <div class="container">
+        <div class="row">
+            <!-- Adres Seçimi ve Yönetimi -->
+            <div class="col-lg-8 p-b-30">
+                <div class="p-l-25 p-r-30 p-lr-0-lg">
+                    <form asp-controller="Checkout" asp-action="CreatePayment" method="post" id="checkoutForm">
+                        @Html.AntiForgeryToken()
+
+                        <!-- Shipping Address Seçimi -->
+                        <h4 class="address-section-title">
+                            <i class="fa fa-map-marker"></i>
+                            Select Shipping Address
+                        </h4>
+
+                        @if (addresses.Any())
+                        {
+                            <div class="address-cards-container" id="shippingAddressCards">
+                                @foreach (var address in addresses)
+                                {
+                                    <div class="address-card" data-address-id="@address.Id" data-address-type="shipping">
+                                        <div class="address-card-header">
+                                            <h6 class="address-card-title">@address.Title</h6>
+                                            @if (address.IsDefault)
+                                            {
+                                                <span class="address-card-badge">Default</span>
+                                            }
+                                        </div>
+                                        <div class="address-card-body">
+                                            <p><strong>@address.AddressLine1</strong></p>
+                                            @if (!string.IsNullOrEmpty(address.AddressLine2))
+                                            {
+                                                <p>@address.AddressLine2</p>
+                                            }
+                                            <p>@address.District, @address.City</p>
+                                            @if (!string.IsNullOrEmpty(address.PostalCode))
+                                            {
+                                                <p>@address.PostalCode</p>
+                                            }
+                                            <p>@address.Country</p>
+                                        </div>
+                                        <div class="address-card-actions">
+                                            <button type="button" class="edit-address-btn" data-address-id="@address.Id" 
+                                                    data-title="@address.Title"
+                                                    data-line1="@address.AddressLine1"
+                                                    data-line2="@address.AddressLine2"
+                                                    data-city="@address.City"
+                                                    data-district="@address.District"
+                                                    data-postal="@address.PostalCode"
+                                                    data-country="@address.Country">
+                                                <i class="fa fa-edit"></i> Edit
+                                            </button>
+                                            <button type="button" class="delete-address-btn delete-btn" data-address-id="@address.Id" data-title="@address.Title">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="add-address-card" id="showAddressFormBtn">
+                                    <i class="fa fa-plus-circle"></i>
+                                    <p>Add New Address</p>
+                                </div>
+                            </div>
+                            <input type="hidden" name="shippingAddressId" id="shippingAddressId" required>
+                        }
+                        else
+                        {
+                            <div class="no-addresses-message">
+                                <i class="fa fa-map-marker"></i>
+                                <p>You don't have any saved addresses. Please add a new address below.</p>
+                            </div>
+                            <input type="hidden" name="shippingAddressId" id="shippingAddressId">
+                        }
+
+                        <!-- Billing Address Seçimi -->
+                        @if (addresses.Any())
+                        {
+                            <h4 class="address-section-title m-t-40">
+                                <i class="fa fa-file-text"></i>
+                                Select Billing Address (Optional)
+                            </h4>
+                            <p class="stext-107 cl6 m-b-20">Leave unselected to use the same as shipping address</p>
+
+                            <div class="address-cards-container" id="billingAddressCards">
+                                @foreach (var address in addresses)
+                                {
+                                    <div class="address-card" data-address-id="@address.Id" data-address-type="billing">
+                                        <div class="address-card-header">
+                                            <h6 class="address-card-title">@address.Title</h6>
+                                            @if (address.IsDefault)
+                                            {
+                                                <span class="address-card-badge">Default</span>
+                                            }
+                                        </div>
+                                        <div class="address-card-body">
+                                            <p><strong>@address.AddressLine1</strong></p>
+                                            @if (!string.IsNullOrEmpty(address.AddressLine2))
+                                            {
+                                                <p>@address.AddressLine2</p>
+                                            }
+                                            <p>@address.District, @address.City</p>
+                                            @if (!string.IsNullOrEmpty(address.PostalCode))
+                                            {
+                                                <p>@address.PostalCode</p>
+                                            }
+                                            <p>@address.Country</p>
+                                        </div>
+                                        <div class="address-card-actions">
+                                            <button type="button" class="edit-address-btn" data-address-id="@address.Id" 
+                                                    data-title="@address.Title"
+                                                    data-line1="@address.AddressLine1"
+                                                    data-line2="@address.AddressLine2"
+                                                    data-city="@address.City"
+                                                    data-district="@address.District"
+                                                    data-postal="@address.PostalCode"
+                                                    data-country="@address.Country">
+                                                <i class="fa fa-edit"></i> Edit
+                                            </button>
+                                            <button type="button" class="delete-address-btn delete-btn" data-address-id="@address.Id" data-title="@address.Title">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <input type="hidden" name="billingAddressId" id="billingAddressId">
+                        }
+
+                        <!-- Yeni Adres Formu -->
+                        <div class="new-address-form @(addresses.Any() ? "hidden" : "") m-t-40" id="newAddressForm">
+                            <h5>
+                                <i class="fa fa-plus-circle"></i>
+                                Add New Address
+                            </h5>
+                            
+                            <div class="bor8 m-b-20">
+                                <input type="text" id="addressTitle" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="Address Title (e.g., Home, Office)">
+                            </div>
+
+                            <div class="bor8 m-b-20">
+                                <input type="text" id="addressLine1" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="Address Line 1">
+                            </div>
+
+                            <div class="bor8 m-b-20">
+                                <input type="text" id="addressLine2" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="Address Line 2 (Optional)">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="bor8 m-b-20">
+                                        <input type="text" id="city" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="City">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="bor8 m-b-20">
+                                        <input type="text" id="district" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="District">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="bor8 m-b-20">
+                                        <input type="text" id="postalCode" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="Postal Code">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="bor8 m-b-20">
+                                        <input type="text" id="country" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="Country" value="Turkey">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 10px;">
+                                <button type="button" id="saveAddressBtn" class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 pointer" style="flex: 1;">
+                                    <i class="fa fa-save"></i> Save Address
+                                </button>
+                                <button type="button" id="cancelAddressBtn" class="flex-c-m stext-101 cl6 size-112 bg8 bor11 hov-btn4 p-lr-15 trans-04 pointer" style="flex: 1;">
+                                    <i class="fa fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <!-- Sepet Özeti -->
+            <div class="col-lg-4 p-b-30">
+                <div class="p-l-25 p-r-30 p-lr-0-lg">
+                    <h4 class="mtext-105 cl2 p-b-14">
+                        Order Summary
+                    </h4>
+
+                    <div class="wrap-table-shopping-cart">
+                        <table class="table-shopping-cart">
+                            <tr class="table-head">
+                                <th class="column-1">Product</th>
+                                <th class="column-2"></th>
+                                <th class="column-3">Price</th>
+                            </tr>
+
+                            @foreach (var item in cartItems)
+                            {
+                                <tr class="table-row">
+                                    <td class="column-1">
+                                        <div class="how-itemcart1">
+                                            <img src="@(item.ProductImageUrl ?? "/images/product-01.jpg")" alt="@item.ProductName">
+                                        </div>
+                                    </td>
+                                    <td class="column-2">
+                                        <a asp-controller="ProductDetail" asp-action="Index" asp-route-id="@item.ProductId" class="stext-104 cl4 hov-cl1 trans-04">
+                                            @item.ProductName
+                                        </a>
+                                        <span class="stext-107 cl6">x @item.Quantity</span>
+                                    </td>
+                                    <td class="column-3">
+                                        <span class="stext-104 cl3">@PriceHelper.FormatAsDollar(item.SubTotal)</span>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+
+                    <div class="flex-w flex-t p-t-27 p-b-33">
+                        <div class="size-208">
+                            <span class="mtext-101 cl2">
+                                Total:
+                            </span>
+                        </div>
+
+                        <div class="size-209 p-t-1">
+                            <span class="mtext-110 cl2">
+                                @PriceHelper.FormatAsDollar(total)
+                            </span>
+                        </div>
+                    </div>
+
+                    <button type="submit" form="checkoutForm" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer w-full">
+                        Place Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Adres Düzenleme Modal -->
+<div class="address-edit-modal" id="editAddressModal">
+    <div class="address-edit-modal-content">
+        <div class="modal-header">
+            <h5>Edit Address</h5>
+            <button type="button" class="modal-close" id="closeEditModal">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editAddressId">
+            
+            <div class="bor8 m-b-20">
+                <input type="text" id="editAddressTitle" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="Address Title">
+            </div>
+
+            <div class="bor8 m-b-20">
+                <input type="text" id="editAddressLine1" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="Address Line 1">
+            </div>
+
+            <div class="bor8 m-b-20">
+                <input type="text" id="editAddressLine2" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="Address Line 2 (Optional)">
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="bor8 m-b-20">
+                        <input type="text" id="editCity" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="City">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bor8 m-b-20">
+                        <input type="text" id="editDistrict" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="District">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="bor8 m-b-20">
+                        <input type="text" id="editPostalCode" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="Postal Code">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bor8 m-b-20">
+                        <input type="text" id="editCountry" class="stext-111 cl2 plh3 size-116 p-lr-15" placeholder="Country">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-cancel" id="cancelEditBtn">
+                <i class="fa fa-times"></i> Cancel
+            </button>
+            <button type="button" class="btn-save" id="saveEditBtn">
+                <i class="fa fa-save"></i> Save Changes
+            </button>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/checkout.css">
+}
+
+@section Scripts {
+    <script src="~/js/checkout.js"></script>
+}
+

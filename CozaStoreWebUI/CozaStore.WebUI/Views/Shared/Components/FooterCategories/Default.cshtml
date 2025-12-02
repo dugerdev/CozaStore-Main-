@@ -1,0 +1,23 @@
+@model List<CozaStore.Application.DTOs.CategoryDto>
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var category in Model.Take(4))
+    {
+        <li class="p-b-10">
+            <a asp-controller="Shop" asp-action="Index" asp-route-categoryId="@category.Id" class="stext-107 cl7 hov-cl1 trans-04">
+                @category.Name
+            </a>
+        </li>
+    }
+}
+else
+{
+    <li class="p-b-10">
+        <a asp-controller="Shop" asp-action="Index" class="stext-107 cl7 hov-cl1 trans-04">
+            All Products
+        </a>
+    </li>
+}
+
+

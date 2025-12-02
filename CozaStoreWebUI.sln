@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CozaStore.Application", "CozaStoreWebUI\CozaStore.Application\CozaStore.Application.csproj", "{0E7FC857-14C5-45EC-A442-032754EDCD51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CozaStore.WebUI", "CozaStoreWebUI\CozaStore.WebUI\CozaStore.WebUI.csproj", "{F2385413-65FD-462F-83DD-78111D911FA5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Debug|x64.Build.0 = Debug|Any CPU
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Debug|x86.Build.0 = Debug|Any CPU
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Release|x64.ActiveCfg = Release|Any CPU
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Release|x64.Build.0 = Release|Any CPU
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Release|x86.ActiveCfg = Release|Any CPU
+		{0E7FC857-14C5-45EC-A442-032754EDCD51}.Release|x86.Build.0 = Release|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Debug|x64.Build.0 = Debug|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Debug|x86.Build.0 = Debug|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Release|x64.ActiveCfg = Release|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Release|x64.Build.0 = Release|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Release|x86.ActiveCfg = Release|Any CPU
+		{F2385413-65FD-462F-83DD-78111D911FA5}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

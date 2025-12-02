@@ -1,0 +1,102 @@
+@model List<CozaStore.Application.DTOs.CategoryDto>
+@{
+    ViewData["Title"] = "Kategoriler";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title">Kategori Listesi</h3>
+                <a asp-action="Create" class="btn btn-primary btn-sm">
+                    <i class="bi bi-plus-circle me-1"></i> Yeni Kategori
+                </a>
+            </div>
+            <div class="card-body">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Görsel</th>
+                            <th>Kategori Adı</th>
+                            <th>Açıklama</th>
+                            <th>Durum</th>
+                            <th>Oluşturulma Tarihi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var category in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(category.ImageUrl))
+                                        {
+                                            <img src="@category.ImageUrl" alt="@category.Name" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;" />
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Görsel Yok</span>
+                                        }
+                                    </td>
+                                    <td>@category.Name</td>
+                                    <td>@(category.Description ?? "-")</td>
+                                    <td>
+                                        @if (category.IsActive)
+                                        {
+                                            <span class="badge text-bg-success">Aktif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge text-bg-secondary">Pasif</span>
+                                        }
+                                    </td>
+                                    <td>@category.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Details" asp-route-id="@category.Id" class="btn btn-info btn-sm">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@category.Id" class="btn btn-warning btn-sm">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <form asp-action="Delete" asp-route-id="@category.Id" method="post" class="d-inline" onsubmit="return confirm('Bu kategoriyi silmek istediğinizden emin misiniz?');">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">Henüz kategori bulunmamaktadır.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

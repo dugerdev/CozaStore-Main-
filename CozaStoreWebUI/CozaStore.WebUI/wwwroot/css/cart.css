@@ -1,0 +1,66 @@
+/* Cart sayfası için özel stiller */
+
+/* Action kolonu genişliği */
+.table-shopping-cart .column-6 {
+    width: 180px;
+    min-width: 180px;
+    text-align: center;
+    padding: 20px 15px !important;
+    vertical-align: middle;
+}
+
+.table-shopping-cart .table_head th.column-6 {
+    text-align: center;
+    padding: 20px 15px !important;
+}
+
+/* Remove butonu - Mavi/Mor ton (Wishlist ile aynı) */
+.cart-remove-form {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.cart-remove-form button {
+    background-color: #717fe0 !important;
+    border: 2px solid #717fe0 !important;
+    color: #ffffff !important;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 12px 18px !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    white-space: nowrap;
+    min-width: 140px;
+    width: auto;
+}
+
+.cart-remove-form button:hover {
+    background-color: #5a6bc9 !important;
+    border-color: #5a6bc9 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(113, 127, 224, 0.4);
+}
+
+.cart-remove-form button i {
+    margin-right: 5px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .table-shopping-cart .column-6 {
+        width: 100%;
+        min-width: 100%;
+        padding: 15px 10px !important;
+    }
+    
+    .cart-remove-form button {
+        min-width: 100%;
+        width: 100%;
+    }
+}
+

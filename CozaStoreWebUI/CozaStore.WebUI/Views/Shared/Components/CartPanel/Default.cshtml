@@ -1,0 +1,42 @@
+@using CozaStore.WebUI.ViewModels
+@model CartPanelViewModel
+
+@if (Model != null && Model.Items != null && Model.Items.Any())
+{
+    @foreach (var item in Model.Items)
+    {
+        <li class="header-cart-item flex-w flex-t m-b-12">
+            <div class="header-cart-item-img">
+                <a asp-controller="ProductDetail" asp-action="Index" asp-route-id="@item.ProductId">
+                    <img src="@(item.ProductImageUrl ?? "/images/product-01.jpg")" alt="@item.ProductName">
+                </a>
+            </div>
+
+            <div class="header-cart-item-txt p-t-8">
+                <a asp-controller="ProductDetail" asp-action="Index" asp-route-id="@item.ProductId" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+                    @item.ProductName
+                </a>
+
+                <span class="header-cart-item-info">
+                    @item.Quantity x @PriceHelper.FormatAsDollar(item.ProductPrice)
+                </span>
+            </div>
+        </li>
+    }
+    
+    <!-- Total'ı ViewData'ya koy -->
+    ViewContext.ViewData["CartPanelTotal"] = Model.Total;
+}
+else
+{
+    <li class="header-cart-item flex-w flex-t m-b-12">
+        <div class="header-cart-item-txt p-t-8 w-full text-center">
+            <span class="stext-102 cl6">
+                Your cart is empty
+            </span>
+        </div>
+    </li>
+    
+    ViewContext.ViewData["CartPanelTotal"] = 0m;
+}
+

@@ -1,0 +1,380 @@
+﻿@using CozaStore.Application.DTOs
+@{
+    ViewData["Title"] = "Shop";
+    ViewData["ActiveMenu"] = "Shop";
+    ViewData["HeaderClass"] = "header-v4";
+    ViewData["MenuShadow"] = "yes";
+    var products = ViewData["Products"] as List<ProductDto> ?? new List<ProductDto>();
+    var categories = ViewData["Categories"] as List<CategoryDto> ?? new List<CategoryDto>();
+    var selectedCategoryId = ViewData["SelectedCategoryId"] as Guid?;
+    var search = ViewData["Search"] as string;
+    var sortBy = ViewData["SortBy"] as string;
+    var minPrice = ViewData["MinPrice"] as decimal?;
+    var maxPrice = ViewData["MaxPrice"] as decimal?;
+    var tag = ViewData["Tag"] as string;
+}
+
+<!-- Product -->
+<div class="bg0 m-t-23 p-b-140">
+    <div class="container">
+        <div class="flex-w flex-sb-m p-b-52">
+            <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+                <a asp-controller="Shop" asp-action="Index" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 @(selectedCategoryId == null ? "how-active1" : "")">
+                    All Products
+                </a>
+
+                @foreach (var category in categories)
+                {
+                    <a asp-controller="Shop" asp-action="Index" asp-route-categoryId="@category.Id" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 @(selectedCategoryId == category.Id ? "how-active1" : "")">
+                        @category.Name
+                    </a>
+                }
+            </div>
+
+            <div class="flex-w flex-c-m m-tb-10">
+                <div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
+                    <i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
+                    <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+                    Filter
+                </div>
+
+                <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
+                    <i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
+                    <i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+                    Search
+                </div>
+            </div>
+            
+            <!-- Search product -->
+            <div class="dis-none panel-search w-full p-t-10 p-b-15">
+                <form asp-controller="Shop" asp-action="Index" method="get" class="bor8 dis-flex p-l-15">
+                    <input type="hidden" name="categoryId" value="@selectedCategoryId" />
+                    <input type="hidden" name="sortBy" value="@sortBy" />
+                    <input type="hidden" name="minPrice" value="@minPrice" />
+                    <input type="hidden" name="maxPrice" value="@maxPrice" />
+                    <input type="hidden" name="tag" value="@tag" />
+                    <button type="submit" class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+                        <i class="zmdi zmdi-search"></i>
+                    </button>
+
+                    <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search" placeholder="Search" value="@search">
+                </form>	
+            </div>
+
+            <!-- Filter -->
+            <div class="dis-none panel-filter w-full p-t-10">
+                <div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
+                    <div class="filter-col1 p-r-15 p-b-27">
+                        <div class="mtext-102 cl2 p-b-15">
+                            Sort By
+                        </div>
+
+                        <ul>
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-minPrice="@minPrice"
+                                   asp-route-maxPrice="@maxPrice"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(string.IsNullOrEmpty(sortBy) ? "filter-link-active" : "")">
+                                    Default
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="popularity"
+                                   asp-route-minPrice="@minPrice"
+                                   asp-route-maxPrice="@maxPrice"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(sortBy == "popularity" ? "filter-link-active" : "")">
+                                    Popularity
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="rating"
+                                   asp-route-minPrice="@minPrice"
+                                   asp-route-maxPrice="@maxPrice"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(sortBy == "rating" ? "filter-link-active" : "")">
+                                    Average rating
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="newness"
+                                   asp-route-minPrice="@minPrice"
+                                   asp-route-maxPrice="@maxPrice"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(sortBy == "newness" ? "filter-link-active" : "")">
+                                    Newness
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="price-low"
+                                   asp-route-minPrice="@minPrice"
+                                   asp-route-maxPrice="@maxPrice"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(sortBy == "price-low" ? "filter-link-active" : "")">
+                                    Price: Low to High
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="price-high"
+                                   asp-route-minPrice="@minPrice"
+                                   asp-route-maxPrice="@maxPrice"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(sortBy == "price-high" ? "filter-link-active" : "")">
+                                    Price: High to Low
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="filter-col2 p-r-15 p-b-27">
+                        <div class="mtext-102 cl2 p-b-15">
+                            Price
+                        </div>
+
+                        <ul>
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="@sortBy"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(!minPrice.HasValue && !maxPrice.HasValue ? "filter-link-active" : "")">
+                                    All
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="@sortBy"
+                                   asp-route-minPrice="0"
+                                   asp-route-maxPrice="50"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(minPrice == 0 && maxPrice == 50 ? "filter-link-active" : "")">
+                                    $0.00 - $50.00
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="@sortBy"
+                                   asp-route-minPrice="50"
+                                   asp-route-maxPrice="100"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(minPrice == 50 && maxPrice == 100 ? "filter-link-active" : "")">
+                                    $50.00 - $100.00
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="@sortBy"
+                                   asp-route-minPrice="100"
+                                   asp-route-maxPrice="150"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(minPrice == 100 && maxPrice == 150 ? "filter-link-active" : "")">
+                                    $100.00 - $150.00
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="@sortBy"
+                                   asp-route-minPrice="150"
+                                   asp-route-maxPrice="200"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(minPrice == 150 && maxPrice == 200 ? "filter-link-active" : "")">
+                                    $150.00 - $200.00
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a asp-controller="Shop" asp-action="Index" 
+                                   asp-route-categoryId="@selectedCategoryId" 
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="@sortBy"
+                                   asp-route-minPrice="200"
+                                   asp-route-tag="@tag"
+                                   class="filter-link stext-106 trans-04 @(minPrice == 200 && !maxPrice.HasValue ? "filter-link-active" : "")">
+                                    $200.00+
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="filter-col3 p-b-27">
+                        <div class="mtext-102 cl2 p-b-15">
+                            Tags
+                        </div>
+
+                        <div class="flex-w p-t-4 m-r--5">
+                            <a asp-controller="Shop" asp-action="Index" 
+                               asp-route-categoryId="@selectedCategoryId" 
+                               asp-route-search="@search"
+                               asp-route-sortBy="@sortBy"
+                               asp-route-minPrice="@minPrice"
+                               asp-route-maxPrice="@maxPrice"
+                               asp-route-tag="Fashion"
+                               class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5 @(tag == "Fashion" ? "hov-tag1-active" : "")">
+                                Fashion
+                            </a>
+
+                            <a asp-controller="Shop" asp-action="Index" 
+                               asp-route-categoryId="@selectedCategoryId" 
+                               asp-route-search="@search"
+                               asp-route-sortBy="@sortBy"
+                               asp-route-minPrice="@minPrice"
+                               asp-route-maxPrice="@maxPrice"
+                               asp-route-tag="Lifestyle"
+                               class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5 @(tag == "Lifestyle" ? "hov-tag1-active" : "")">
+                                Lifestyle
+                            </a>
+
+                            <a asp-controller="Shop" asp-action="Index" 
+                               asp-route-categoryId="@selectedCategoryId" 
+                               asp-route-search="@search"
+                               asp-route-sortBy="@sortBy"
+                               asp-route-minPrice="@minPrice"
+                               asp-route-maxPrice="@maxPrice"
+                               asp-route-tag="Denim"
+                               class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5 @(tag == "Denim" ? "hov-tag1-active" : "")">
+                                Denim
+                            </a>
+
+                            <a asp-controller="Shop" asp-action="Index" 
+                               asp-route-categoryId="@selectedCategoryId" 
+                               asp-route-search="@search"
+                               asp-route-sortBy="@sortBy"
+                               asp-route-minPrice="@minPrice"
+                               asp-route-maxPrice="@maxPrice"
+                               asp-route-tag="Streetstyle"
+                               class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5 @(tag == "Streetstyle" ? "hov-tag1-active" : "")">
+                                Streetstyle
+                            </a>
+
+                            <a asp-controller="Shop" asp-action="Index" 
+                               asp-route-categoryId="@selectedCategoryId" 
+                               asp-route-search="@search"
+                               asp-route-sortBy="@sortBy"
+                               asp-route-minPrice="@minPrice"
+                               asp-route-maxPrice="@maxPrice"
+                               asp-route-tag="Crafts"
+                               class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5 @(tag == "Crafts" ? "hov-tag1-active" : "")">
+                                Crafts
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row isotope-grid">
+            @if (products.Any())
+            {
+                foreach (var product in products)
+                {
+                    var categoryName = categories.FirstOrDefault(c => c.Id == product.CategoryId)?.Name?.ToLower() ?? "general";
+                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item @categoryName">
+                        <div class="block2">
+                            <div class="block2-pic hov-img0">
+                                <img src="@(product.ImageUrl ?? "/images/product-01.jpg")" alt="@product.Name">
+
+                                <a asp-controller="ProductDetail" asp-action="Index" asp-route-id="@product.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+                                    Quick View
+                                </a>
+                            </div>
+
+                            <div class="block2-txt flex-w flex-t p-t-14">
+                                <div class="block2-txt-child1 flex-col-l">
+                                    <a asp-controller="ProductDetail" asp-action="Index" asp-route-id="@product.Id" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        @product.Name
+                                    </a>
+
+                                    <span class="stext-105 cl3">
+                                        @PriceHelper.FormatAsDollar(product.Price)
+                                    </span>
+                                </div>
+
+                                <div class="block2-txt-child2 flex-r p-t-3">
+                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" data-product-id="@product.Id">
+                                        <img class="icon-heart1 dis-block trans-04" src="~/images/icons/icon-heart-01.png" alt="ICON">
+                                        <img class="icon-heart2 dis-block trans-04 ab-t-l" src="~/images/icons/icon-heart-02.png" alt="ICON">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="text-center p-t-50 p-b-50">
+                        <p class="stext-102 cl3">
+                            @if (selectedCategoryId != null)
+                            {
+                                <text>No products found in this category.</text>
+                            }
+                            else
+                            {
+                                <text>No products available at the moment.</text>
+                            }
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (products.Count > 0)
+        {
+            <div class="flex-c-m flex-w w-full p-t-45">
+                <p class="stext-102 cl5">
+                    Showing @products.Count products
+                </p>
+            </div>
+        }
+    </div>
+</div>
+
+@* Anti-forgery token için hidden form *@
+<form id="antiForgeryForm" style="display: none;">
+    @Html.AntiForgeryToken()
+</form>
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/css/shop.css">
+}
+
+@section Scripts {
+    <script src="~/js/shop.js"></script>
+}

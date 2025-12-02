@@ -1,0 +1,137 @@
+﻿@using CozaStore.Application.DTOs
+@model RegisterRequestDto
+@{
+    ViewData["Title"] = "Register";
+    ViewData["ActiveMenu"] = "";
+    ViewData["HeaderClass"] = "header-v4";
+    ViewData["MenuShadow"] = "yes";
+}
+
+<!-- Breadcrumb -->
+<div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+        <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">
+            Home
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+        <span class="stext-109 cl4">
+            Register
+        </span>
+    </div>
+</div>
+
+<!-- Register Form -->
+<section class="bg0 p-t-104 p-b-116">
+    <div class="container">
+        <div class="flex-w flex-tr">
+            <div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md m-lr-auto">
+                    <h4 class="mtext-105 cl2 txt-center p-b-30">
+                        Create Account
+                    </h4>
+
+                    <!-- Hata Mesajları (Sadece kart içerisinde) -->
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger m-b-20" role="alert" style="background-color: #f8d7da; color: #721c24; padding: 12px 20px; border-radius: 4px; border: 1px solid #f5c6cb; font-size: 14px;">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success m-b-20" role="alert" style="background-color: #d4edda; color: #155724; padding: 12px 20px; border-radius: 4px; border: 1px solid #c3e6cb; font-size: 14px;">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+
+                    <form asp-controller="Auth" asp-action="Register" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <!-- First Name ve Last Name yan yana -->
+                        <div class="row">
+                            <div class="col-md-6 p-r-10">
+                                <div class="bor8 m-b-20 how-pos4-parent">
+                                    <input 
+                                        asp-for="FirstName" 
+                                        class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" 
+                                        type="text" 
+                                        placeholder="First Name"
+                                        required />
+                                    <i class="zmdi zmdi-account how-pos4 pointer-none" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #999;"></i>
+                                </div>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 p-l-10">
+                                <div class="bor8 m-b-20 how-pos4-parent">
+                                    <input 
+                                        asp-for="LastName" 
+                                        class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" 
+                                        type="text" 
+                                        placeholder="Last Name"
+                                        required />
+                                    <i class="zmdi zmdi-account how-pos4 pointer-none" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #999;"></i>
+                                </div>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Email Input -->
+                        <div class="bor8 m-b-20 how-pos4-parent">
+                            <input 
+                                asp-for="Email" 
+                                class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" 
+                                type="email" 
+                                placeholder="Your Email Address"
+                                required />
+                            <img class="how-pos4 pointer-none" src="~/images/icons/icon-email.png" alt="ICON">
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+
+                        <!-- Password Input -->
+                        <div class="bor8 m-b-20 how-pos4-parent">
+                            <input 
+                                asp-for="Password" 
+                                class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" 
+                                type="password" 
+                                placeholder="Password"
+                                required />
+                            <i class="zmdi zmdi-lock how-pos4 pointer-none" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #999;"></i>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+
+                        <!-- Confirm Password Input -->
+                        <div class="bor8 m-b-20 how-pos4-parent">
+                            <input 
+                                asp-for="ConfirmPassword" 
+                                class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" 
+                                type="password" 
+                                placeholder="Confirm Password"
+                                required />
+                            <i class="zmdi zmdi-lock how-pos4 pointer-none" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #999;"></i>
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="flex-c-m stext-101 cl0 size-121 bg1 bor1 hov-btn1 p-lr-15 trans-04 pointer">
+                            REGISTER
+                        </button>
+                    </form>
+
+                    <!-- Login Link -->
+                    <div class="text-center m-t-20">
+                        <span class="stext-107 cl6">
+                            Already have an account?
+                            <a asp-controller="Auth" asp-action="Login" class="stext-108 cl7 hov-cl1 trans-04">
+                                Login Now
+                            </a>
+                        </span>
+                    </div>
+                </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

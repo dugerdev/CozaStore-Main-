@@ -1,0 +1,72 @@
+@model CozaStore.Application.DTOs.ProductDto
+@{
+    ViewData["Title"] = "Ürün Detayı";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Ürün Detayı</h3>
+                <div class="card-tools">
+                    <a asp-action="Index" class="btn btn-secondary btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i> Geri Dön
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Ürün Adı:</dt>
+                    <dd class="col-sm-9">@Model.Name</dd>
+
+                    <dt class="col-sm-3">Açıklama:</dt>
+                    <dd class="col-sm-9">@(Model.Description ?? "Açıklama yok")</dd>
+
+                    <dt class="col-sm-3">Fiyat:</dt>
+                    <dd class="col-sm-9">@Model.Price.ToString("C")</dd>
+
+                    <dt class="col-sm-3">Stok:</dt>
+                    <dd class="col-sm-9">@Model.Stock</dd>
+
+                    <dt class="col-sm-3">Kategori:</dt>
+                    <dd class="col-sm-9">@(Model.CategoryName ?? "-")</dd>
+
+                    <dt class="col-sm-3">Durum:</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge text-bg-success">Aktif</span>
+                        }
+                        else
+                        {
+                            <span class="badge text-bg-secondary">Pasif</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Görsel:</dt>
+                    <dd class="col-sm-9">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-thumbnail" style="max-width: 300px;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Görsel yok</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Oluşturulma Tarihi:</dt>
+                    <dd class="col-sm-9">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                    <i class="bi bi-pencil me-1"></i> Düzenle
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Listeye Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+@model CozaStore.Application.DTOs.ContactDto
+@{
+    ViewData["Title"] = "Mesaj Detayı";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Mesaj Detayı</h3>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">E-posta:</dt>
+                    <dd class="col-sm-9">@Model.Email</dd>
+
+                    <dt class="col-sm-3">Mesaj:</dt>
+                    <dd class="col-sm-9">
+                        <div class="border p-3 rounded">
+                            @(Model.Message ?? "-")
+                        </div>
+                    </dd>
+
+                    <dt class="col-sm-3">Okundu:</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.IsRead)
+                        {
+                            <span class="badge text-bg-success">Okundu</span>
+                            @if (Model.ReadDate.HasValue)
+                            {
+                                <br />
+                                <small class="text-muted">Okunma Tarihi: @Model.ReadDate.Value.ToString("dd.MM.yyyy HH:mm")</small>
+                            }
+                        }
+                        else
+                        {
+                            <span class="badge text-bg-warning">Okunmadı</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Gönderilme Tarihi:</dt>
+                    <dd class="col-sm-9">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                @if (!Model.IsRead)
+                {
+                    <form asp-action="MarkAsRead" asp-route-id="@Model.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle me-1"></i> Okundu Olarak İşaretle
+                        </button>
+                    </form>
+                }
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline" onsubmit="return confirm('Bu mesajı silmek istediğinizden emin misiniz?');">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i> Sil
+                    </button>
+                </form>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
