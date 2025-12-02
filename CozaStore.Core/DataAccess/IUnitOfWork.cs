@@ -172,9 +172,9 @@ namespace CozaStore.Core.DataAccess
         ///     // Hata loglama
         /// }
         /// 
-    /// NOT: Transaction yoksa hiçbir şey yapılmaz (sessizce başarısız olur).
-    /// </summary>
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        /// NOT: Transaction yoksa hiçbir şey yapılmaz (sessizce başarısız olur).
+        /// </summary>
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         Task BeginTransactionAsync(CancellationToken cancellationToken = default);
         Task CommitTransactionAsync(CancellationToken cancellationToken = default);
         Task RollbackTransactionAsync(CancellationToken cancellationToken = default);
