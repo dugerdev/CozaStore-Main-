@@ -66,6 +66,7 @@ artifacts/
 
 ## Sensitive files
 appsettings.Development.json
+appsettings.json
 *.pfx
 *.key
 *.db

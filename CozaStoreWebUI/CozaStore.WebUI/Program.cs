@@ -6,7 +6,7 @@ using ReviewService = Stripe.ReviewService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7087/api";
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7158/api";
 
 // IHttpContextAccessor'ı ekle (JWT token handler için gerekli)
 builder.Services.AddHttpContextAccessor();
